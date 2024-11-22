@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -17,6 +18,11 @@ public class Game1 : Game
     private Vector2 targetPosition = new(300, 300);
     private const int targetRadius = 45;
 
+    private MouseState mouseState;
+    private bool mouseReleased = true;
+
+    private int score = 0;
+
     public Game1()
     {
         graphics = new GraphicsDeviceManager(this);
@@ -26,8 +32,6 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
-
         base.Initialize();
     }
 
@@ -44,9 +48,38 @@ public class Game1 : Game
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        {
             Exit();
+        }
 
-        // TODO: Add your update logic here
+        mouseState = Mouse.GetState();
+
+        if (mouseState.LeftButton == ButtonState.Pressed && mouseReleased == true)
+        {
+            mouseReleased = false;
+
+            float mouseTargetDistance = Vector2.Distance(targetPosition, mouseState.Position.ToVector2());
+
+            if (mouseTargetDistance < targetRadius)
+            {
+                score++;
+
+                int offset = 50 + targetRadius;
+                Random random = new();
+
+                targetPosition.X = random.Next(offset, graphics.PreferredBackBufferWidth - offset);
+                targetPosition.Y = random.Next(offset, graphics.PreferredBackBufferHeight - offset);
+            }
+            else
+            {
+                score--;
+            }
+        }
+
+        if (mouseState.LeftButton == ButtonState.Released)
+        {
+            mouseReleased = true;
+        }
 
         base.Update(gameTime);
     }
@@ -57,8 +90,8 @@ public class Game1 : Game
 
         spriteBatch.Begin();
         spriteBatch.Draw(backgroundSprite, new Vector2(0, 0), Color.White);
-        spriteBatch.DrawString(gameFont, "Test message", new Vector2(100, 100), Color.White);
-        spriteBatch.Draw(targetSprite, targetPosition, Color.White);
+        spriteBatch.DrawString(gameFont, "Score: " + score.ToString(), new Vector2(10, 5), Color.White);
+        spriteBatch.Draw(targetSprite, new Vector2(targetPosition.X - targetRadius, targetPosition.Y - targetRadius), Color.White);
         spriteBatch.End();
 
         base.Draw(gameTime);
