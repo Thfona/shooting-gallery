@@ -6,12 +6,20 @@ namespace ShootingGallery;
 
 public class Game1 : Game
 {
-    private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
+    private GraphicsDeviceManager graphics;
+    private SpriteBatch spriteBatch;
+
+    private Texture2D targetSprite;
+    private Texture2D crosshairSprite;
+    private Texture2D backgroundSprite;
+    private SpriteFont gameFont;
+
+    private Vector2 targetPosition = new(300, 300);
+    private const int targetRadius = 45;
 
     public Game1()
     {
-        _graphics = new GraphicsDeviceManager(this);
+        graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
@@ -25,9 +33,12 @@ public class Game1 : Game
 
     protected override void LoadContent()
     {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
+        spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        // TODO: use this.Content to load your game content here
+        targetSprite = Content.Load<Texture2D>("target");
+        crosshairSprite = Content.Load<Texture2D>("crosshair");
+        backgroundSprite = Content.Load<Texture2D>("sky");
+        gameFont = Content.Load<SpriteFont>("galleryFont");
     }
 
     protected override void Update(GameTime gameTime)
@@ -44,7 +55,11 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        // TODO: Add your drawing code here
+        spriteBatch.Begin();
+        spriteBatch.Draw(backgroundSprite, new Vector2(0, 0), Color.White);
+        spriteBatch.DrawString(gameFont, "Test message", new Vector2(100, 100), Color.White);
+        spriteBatch.Draw(targetSprite, targetPosition, Color.White);
+        spriteBatch.End();
 
         base.Draw(gameTime);
     }
