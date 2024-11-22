@@ -1,3 +1,3 @@
 # Shooting Gallery
 
-MonoGame study project. Shoot as many targets before the timer runs out.
+MonoGame study project. Shoot as many targets as you can before the timer runs out.
