@@ -75,12 +75,11 @@ public class Game1 : Game
             {
                 score++;
 
-                int horizontalOffset = 50 + targetRadius;
-                int verticalOffset = 70 + targetRadius;
+                int offset = 50 + targetRadius;
                 Random random = new();
 
-                targetPosition.X = random.Next(horizontalOffset, graphics.PreferredBackBufferWidth - horizontalOffset);
-                targetPosition.Y = random.Next(verticalOffset, graphics.PreferredBackBufferHeight - verticalOffset);
+                targetPosition.X = random.Next(offset, graphics.PreferredBackBufferWidth - offset);
+                targetPosition.Y = random.Next(offset + 30, graphics.PreferredBackBufferHeight - offset);
             }
             else if (timer > 0)
             {
